@@ -1,0 +1,174 @@
+<div class="product_detail">
+    <div id="name" data-name="Absolute">Absolute | 29AN1783</div>
+    <div id="bullcode" data-bullcode="29AN1783"></div>
+    <img src="Screenshot 2021-08-25 at 12.05 1.png" alt="">
+<div id='product-component'></div>
+
+</div>
+
+<style>
+.product_detail{position: relative;}
+.product_detail #name{font-size: 25px;}    
+.product_detail img{width: 100%;}    
+#product-component{position: absolute;bottom: 10%;right: 0;left: 0;margin: 0 auto;}
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+$('#btnToPurchaseSemen').after('<div id="product-component"></div>');
+(function () {
+var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+if (window.ShopifyBuy) {
+if (window.ShopifyBuy.UI) {
+ ShopifyBuyInit();
+} else {
+ loadScript();
+}
+} else {
+ loadScript();
+}
+
+function loadScript() {
+var script = document.createElement('script');
+script.async = true;
+script.src = scriptURL;
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
+script.onload = ShopifyBuyInit;
+}
+function ShopifyBuyInit() {
+var client = ShopifyBuy.buildClient({
+domain: 'abs-global-store.myshopify.com',
+storefrontAccessToken: '287ad51b65617a2b06efe2b6cf747451',
+});
+ShopifyBuy.UI.onReady(client).then(async function (ui) {
+
+var product_name = $('#name').data('name');
+var bullcode = $('#bullcode').data('bullcode');
+var title = product_name+'-'+bullcode;
+// var title = 'Absolute-29AN1783'; // get title from element on Details Page
+const prodId = await client.product.fetchQuery({first:1, query: 'title:'+title}).then((prods)=>{
+ if (prods.length>0)
+ prod = prods[0];
+ else
+ {
+ throw new Error("Product could not be found")
+ }
+ console.log(prod);
+ prodUri = atob(prod.id);
+ return prodUri.substring(prodUri.lastIndexOf('/')+1);
+ });
+ console.log(prodId);
+ui.createComponent('product', {
+id: prodId,
+node: document.getElementById('product-component'),
+moneyFormat: '%24%7B%7Bamount%7D%7D',
+options: {
+"product": {
+"styles": {
+"product": {
+"@media (min-width: 601px)": {
+"max-width": "calc(100% - 20px)",
+"margin-left": "20px",
+"margin-bottom": "50px"
+}
+},
+"button": {
+":hover": {
+"background-color": "#00369b"
+},
+"background-color": "#00205b",
+":focus": {
+"background-color": "#00369b"
+},
+"width":"100%",
+"border-radius": "5px"
+}
+},
+"buttonDestination": "checkout",
+"contents": {
+"img": false,
+"title": false,
+"price": false
+},
+"text": {
+"button": "Buy now"
+}
+},
+"productSet": {
+"styles": {
+"products": {
+"@media (min-width: 601px)": {
+"margin-left": "-20px"
+}
+}
+}
+},
+"modalProduct": {
+"contents": {
+"img": false,
+"imgWithCarousel": false,
+"button": true,
+"buttonWithQuantity": true
+},
+"styles": {
+"product": {
+"@media (min-width: 601px)": {
+"max-width": "100%",
+"margin-left": "0px",
+"margin-bottom": "0px"
+}
+},
+"button": {
+":hover": {
+"background-color": "#00369b"
+},
+"background-color": "#00205b",
+":focus": {
+"background-color": "#00369b"
+},
+"border-radius": "30px"
+}
+},
+"text": {
+"button": "Add to cart"
+}
+},
+"option": {},
+"cart": {
+"styles": {
+"button": {
+":hover": {
+"background-color": "#00369b"
+},
+"background-color": "#00205b",
+":focus": {
+"background-color": "#00369b"
+},
+"border-radius": "30px"
+}
+},
+"text": {
+"total": "Subtotal",
+"button": "Checkout"
+}
+},
+"toggle": {
+"styles": {
+"toggle": {
+"background-color": "#00205b",
+":hover": {
+"background-color": "#00369b"
+},
+":focus": {
+"background-color": "#00369b"
+}
+}
+}
+}
+},
+});
+});
+}
+})();
+/*]]>*/
+</script>
